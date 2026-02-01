@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import { TenantRequest, tenantResolver } from "./middlewares/tenantResolver";
 
 dotenv.config();
 
@@ -13,6 +14,14 @@ app.get("/health", (_req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+//protected test route
+app.get("/test-tenant", tenantResolver, (req: TenantRequest, res) => {
+    res.json({
+        message : "Tenant resolved successfully",
+        tenantId : req.tenantId
+    })
+})
 
 const PORT = process.env.PORT || 3000;
 
